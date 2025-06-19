@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('expenses', function (Blueprint $table) {
-            $table->foreign('household_id')->references('id')->on('households')->onDelete('cascade');
+            $table->unsignedBigInteger('household_id'); // Step 1: Add the column
+            $table->foreign('household_id')             // Step 2: Add the FK
+                  ->references('id')->on('households')
+                  ->onDelete('cascade');
         });
     }
 
