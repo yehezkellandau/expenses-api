@@ -3,6 +3,5 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return ['Laravel' => app()->version(),
-"test" => "uptodate"];
+    return ['Laravel' => app()->version()];
 });
