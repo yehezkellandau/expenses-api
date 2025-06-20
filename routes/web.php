@@ -4,5 +4,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return ['Laravel' => app()->version(),
-"test" => "1234onlyprod"];
+"test" => "uptodate"];
 });
