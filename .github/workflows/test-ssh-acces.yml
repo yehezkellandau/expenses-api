@@ -14,4 +14,4 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Test SSH connection
-        run: ssh -p 2222 -o StrictHostKeyChecking=no lsei9899@yehezkellandau.com 'echo "SSH SUCCESS"'
+        run: ssh -o StrictHostKeyChecking=no lsei9899@yehezkellandau.com 'echo "SSH SUCCESS"'
