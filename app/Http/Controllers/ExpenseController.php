@@ -46,6 +46,7 @@ class ExpenseController extends Controller
     $expenses = \App\Models\Expense::where('household_id', $request->household_id)
         ->whereMonth('date', $month)
         ->whereYear('date', $year)
+        ->orderBy('date', 'desc')
         ->get();
 
     return response()->json([
