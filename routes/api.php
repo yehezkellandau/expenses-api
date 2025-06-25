@@ -6,6 +6,7 @@ use App\Http\Controllers\ExpenseController;
 
 // All routes in this group require authentication
 // Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['api'])->group(function () {
     // Get the authenticated user
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -24,7 +25,8 @@ use App\Http\Controllers\ExpenseController;
         $currentYear = now()->year;
         return redirect()->to("/api/expenses?month={$currentMonth}&year={$currentYear}");
     });
+});
 // });
 
 // Register and login routes from Laravel Breeze (must be below)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
