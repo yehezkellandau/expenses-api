@@ -11,6 +11,7 @@ class Expense extends Model
 
     public function household()
     {
+        //test
         return $this->belongsTo(Household::class);
     }
 }
