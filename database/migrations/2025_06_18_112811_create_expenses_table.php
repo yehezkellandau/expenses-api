@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
+
+            // Foreign keys
+            $table->foreignId('household_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('category_id')->constrained();
+
+            $table->string('name');
             $table->decimal('amount', 10, 2);
-            $table->enum('type', ['cash', 'credit_card']);
+            $table->enum('method', ['cash', 'credit_card']);
             $table->date('date');
+
             $table->timestamps();
         });
     }

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('households', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // e.g. "Yehe's Family"
+            $table->string('name');
+            $table->string('join_code')->unique();
             $table->timestamps();
         });
     }
