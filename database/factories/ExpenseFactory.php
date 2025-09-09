@@ -2,26 +2,26 @@
 
 namespace Database\Factories;
 
+use App\Models\Expense;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\Household;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Expense>
- */
 class ExpenseFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Expense::class;
+
     public function definition(): array
     {
         return [
-            'category' => fake()->randomElement(['Groceries', 'Rent', 'Bills', 'Transport']),
-            'amount' => fake()->randomFloat(2, 10, 500),
-            'type' => fake()->randomElement(['cash', 'credit_card']),
-            'date' => fake()->dateTimeBetween('-3 months', 'now'),
-            'household_id' => null, // will be set in the seeder
+            'household_id' => Household::inRandomOrder()->first()->id, // pick existing household
+            'user_id' => User::inRandomOrder()->first()->id,           // pick existing user
+            'category_id' => Category::inRandomOrder()->first()->id ?? Category::factory(), // pick existing category
+            'name' => $this->faker->sentence(2),
+            'amount' => $this->faker->randomFloat(2, 5, 500),
+            'method' => $this->faker->randomElement(['cash', 'credit_card']),
+            'date' => $this->faker->date(),
         ];
     }
 }
