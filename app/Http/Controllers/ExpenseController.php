@@ -8,54 +8,38 @@ use Carbon\Carbon;
 
 class ExpenseController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $request->validate([
-    //         'month' => 'sometimes|integer|between:1,12',
-    //         'year' => 'sometimes|integer|min:2000|max:' . date('Y'),
-    //     ]);
-
-    //     $month = $request->input('month', Carbon::now()->month);
-    //     $year = $request->input('year', Carbon::now()->year);
-
-    //     $user = $request->user();
-    //     $householdIds = $user->households()->pluck('households.id');
-
-    //     $expenses = Expense::whereIn('household_id', $householdIds)
-    //         ->whereMonth('date', $month)
-    //         ->whereYear('date', $year)
-    //         ->get();
-
-    //     return response()->json([
-    //         'month' => (int) $month,
-    //         'year' => (int) $year,
-    //         'data' => $expenses,
-    //     ]);
-    // }
     public function index(Request $request)
-{
-    $request->validate([
-        'household_id' => 'required|exists:households,id',
-        'month' => 'sometimes|integer|between:1,12',
-        'year' => 'sometimes|integer|min:2000|max:' . date('Y'),
-    ]);
+    {
+        $user = $request->user();
 
-    $month = $request->input('month', now()->month);
-    $year = $request->input('year', now()->year);
+        if (!$user || !$user->household_id) {
+            return response()->json(['message' => 'User does not belong to a household'], 403);
+        }
 
-    $expenses = \App\Models\Expense::where('household_id', $request->household_id)
-        ->whereMonth('date', $month)
-        ->whereYear('date', $year)
-        ->orderBy('date', 'desc')
-        ->get();
+        $householdId = $user->household_id;
 
-    return response()->json([
-        'household_id' => (int) $request->household_id,
-        'month' => (int) $month,
-        'year' => (int) $year,
-        'data' => $expenses,
-    ]);
-}
+        $request->validate([
+            'month' => 'sometimes|integer|between:1,12',
+            'year' => 'sometimes|integer|min:2000|max:' . date('Y'),
+        ]);
+
+        $month = $request->input('month', now()->month);
+        $year = $request->input('year', now()->year);
+
+        $expenses = \App\Models\Expense::where('household_id', $householdId)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->orderBy('date', 'desc')
+            ->get();
+
+        return response()->json([
+            'household_id' => $householdId,
+            'month' => (int)$month,
+            'year' => (int)$year,
+            'data' => $expenses,
+        ]);
+    }
+
 
 
     // public function store(Request $request)
@@ -75,19 +59,19 @@ class ExpenseController extends Controller
     //     return Expense::create($data);
     // }
     public function store(Request $request)
-{
-    $data = $request->validate([
-        'household_id' => 'required|exists:households,id',
-        'category' => 'required|string',
-        'amount' => 'required|numeric',
-        'type' => 'required|in:cash,credit_card',
-        'date' => 'required|date',
-    ]);
+    {
+        $data = $request->validate([
+            'household_id' => 'required|exists:households,id',
+            'category' => 'required|string',
+            'amount' => 'required|numeric',
+            'type' => 'required|in:cash,credit_card',
+            'date' => 'required|date',
+        ]);
 
-    $expense = \App\Models\Expense::create($data);
+        $expense = \App\Models\Expense::create($data);
 
-    return response()->json($expense, 201);
-}
+        return response()->json($expense, 201);
+    }
 
     public function show(Expense $expense)
     {
