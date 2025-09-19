@@ -40,32 +40,16 @@ class ExpenseController extends Controller
         ]);
     }
 
-
-
-    // public function store(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'category' => 'required|string',
-    //         'amount' => 'required|numeric',
-    //         'type' => 'required|in:cash,credit_card',
-    //         'date' => 'required|date',
-    //     ]);
-
-    //     $user = $request->user();
-    //     $household = $user->households()->first(); // or add logic to choose
-
-    //     $data['household_id'] = $household->id;
-
-    //     return Expense::create($data);
-    // }
     public function store(Request $request)
     {
         $data = $request->validate([
             'household_id' => 'required|exists:households,id',
-            'category' => 'required|string',
-            'amount' => 'required|numeric',
-            'type' => 'required|in:cash,credit_card',
-            'date' => 'required|date',
+            'user_id'      => 'required|exists:users,id',
+            'category_id'  => 'required|exists:categories,id',
+            'name'         => 'required|string',
+            'amount'       => 'required|numeric',
+            'method'       => 'required|in:cash,credit_card',
+            'date'         => 'required|date',
         ]);
 
         $expense = \App\Models\Expense::create($data);
