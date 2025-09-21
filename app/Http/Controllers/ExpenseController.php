@@ -43,14 +43,15 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'household_id' => 'required|exists:households,id',
-            'user_id'      => 'required|exists:users,id',
             'category_id'  => 'required|exists:categories,id',
             'name'         => 'required|string',
             'amount'       => 'required|numeric',
             'method'       => 'required|in:cash,credit_card',
             'date'         => 'required|date',
         ]);
+
+        $data['user_id'] = $request->user()->id;
+        $data['household_id'] = $request->user()->household_id;
 
         $expense = \App\Models\Expense::create($data);
 
